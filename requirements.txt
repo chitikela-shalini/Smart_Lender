@@ -8,3 +8,4 @@ seaborn
 xgboost
 joblib
 python-dotenv
+gunicorn

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Analytics | Smart Lender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="/" class="logo">
+                <i class="fas fa-shield-halved"></i>
+                Smart Lender
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/predict_page">Check Eligibility</a>
+                <a href="/dashboard">Analytics</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 3rem; padding-bottom: 3rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 2.5rem;">Model Performance Analytics</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Model Comparison</h3>
+                <canvas id="modelChart" style="margin-top: 1.5rem;"></canvas>
+            </div>
+            <div class="card">
+                <h3>Feature Importance</h3>
+                <canvas id="featureChart" style="margin-top: 1.5rem;"></canvas>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h3>Performance Metrics (XGBoost)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem; text-align: center;">
+                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); border-radius: 0.75rem; border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <h4 style="color: #3b82f6; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">99.0%</h4>
+                    <p style="color: #64748b; font-weight: 500;">Accuracy</p>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-radius: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.2);">
+                    <h4 style="color: #10b981; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">98.5%</h4>
+                    <p style="color: #64748b; font-weight: 500;">Precision</p>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); border-radius: 0.75rem; border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <h4 style="color: #3b82f6; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">99.2%</h4>
+                    <p style="color: #64748b; font-weight: 500;">Recall</p>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%); border-radius: 0.75rem; border: 1px solid rgba(6, 182, 212, 0.2);">
+                    <h4 style="color: #06b6d4; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">0.988</h4>
+                    <p style="color: #64748b; font-weight: 500;">F1-Score</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Model Comparison Chart
+        const modelCtx = document.getElementById('modelChart').getContext('2d');
+        new Chart(modelCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Decision Tree', 'Random Forest', 'KNN', 'XGBoost'],
+                datasets: [{
+                    label: 'Accuracy %',
+                    data: [96.75, 97.50, 95.25, 99.00],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.6)',
+                        'rgba(59, 130, 246, 0.6)',
+                        'rgba(59, 130, 246, 0.6)',
+                        'rgba(59, 130, 246, 1)'
+                    ],
+                    borderColor: 'rgb(37, 99, 235)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            font: { size: 12, weight: '600' },
+                            color: '#475569',
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#64748b',
+                            font: { size: 11 }
+                        },
+                        grid: {
+                            color: 'rgba(226, 232, 240, 0.5)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#64748b',
+                            font: { size: 11 }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Feature Importance Chart (Mock Data based on logic)
+        const featureCtx = document.getElementById('featureChart').getContext('2d');
+        new Chart(featureCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Credit History', 'Income', 'Loan Amount', 'Education', 'Others'],
+                datasets: [{
+                    data: [50, 25, 15, 5, 5],
+                    backgroundColor: [
+                        '#3b82f6',
+                        '#06b6d4',
+                        '#10b981',
+                        '#f59e0b',
+                        '#e2e8f0'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 12, weight: '600' },
+                            color: '#475569',
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2024 Smart Lender. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

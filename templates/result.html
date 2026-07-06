@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | Smart Lender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="/" class="logo">
+                <i class="fas fa-shield-halved"></i>
+                Smart Lender
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/predict_page">Check Eligibility</a>
+                <a href="/dashboard">Analytics</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container result-card">
+            {% if result == "Approved" %}
+                <div class="result-icon status-approved">
+                    <i class="fas fa-circle-check"></i>
+                </div>
+                <h1 class="status-approved">Loan Approved!</h1>
+                <p>Based on our AI analysis, the applicant is highly eligible for the requested loan.</p>
+            {% else %}
+                <div class="result-icon status-rejected">
+                    <i class="fas fa-circle-xmark"></i>
+                </div>
+                <h1 class="status-rejected">Loan Rejected</h1>
+                <p>Based on our AI analysis, the applicant does not meet the current creditworthiness criteria.</p>
+            {% endif %}
+
+            <div class="confidence-meter">
+                <div class="confidence-fill" style="width: {{ confidence }}%"></div>
+            </div>
+            <p><strong>Model Confidence:</strong> {{ confidence }}%</p>
+
+            <div>
+                <h3>Submitted Details:</h3>
+                <div>
+                    <div><strong>Gender:</strong> {{ data.Gender }}</div>
+                    <div><strong>Married:</strong> {{ data.Married }}</div>
+                    <div><strong>Education:</strong> {{ data.Education }}</div>
+                    <div><strong>Credit History:</strong> {{ data.Credit_History }}</div>
+                    <div><strong>Income:</strong> ${{ data.ApplicantIncome }}</div>
+                    <div><strong>Loan Amount:</strong> ${{ data.LoanAmount }}k</div>
+                </div>
+            </div>
+
+            <div>
+                <a href="/predict_page" class="cta-button" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);">New Application</a>
+                <a href="/" class="cta-button">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2024 Smart Lender. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
